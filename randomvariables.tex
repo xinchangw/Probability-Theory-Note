@@ -209,8 +209,186 @@ Note by Chebyshev Inequality have
 Thus we have $ \sup_{x \in [0,1]} \abs{B(x) - f(x)} \to 0$ as $n \to \infty$.
 \end{proof}
 
+\vspace{6pt}
+\subsection{Convergence Concepts}
+
+\subsubsection{Convergence Almost Surely}
+\begin{definition}\ \\
+$X_n \overset{\text{a.s.}}{\longrightarrow} X$ if $X_n(\omega) \to X(\omega)$ for a.e. $\omega \in \Omega$, which is also equivalent to
+\begin{equation*}
+    N_\vep = \sum_n \1_{(\vep, \infty)} (\abs{X_n - X}) < \infty,\ \forall\ \vep > 0\ \text{a.s.}.
+\end{equation*}
+\end{definition}
+
+\vspace{6pt}
+\begin{lemma}[Borel-Cantelli Lemma]\label{BCL}\ 
+\begin{enumerate}[label = (\arabic*)]
+    \item $(B_i)$ is a Bernoulli sequence $B_i = 0 \text{ or } 1$, we have
+    \begin{equation*}
+        \sum_n \P(B_i = 1) < \infty\ \Rightarrow\ \sum_n B_i < \infty \text{ a.s.}.
+    \end{equation*}
+    \item $(H_i)$ be events, then
+    \begin{equation*}
+        \sum_n \P(H_i) < \infty\ \Rightarrow\ \sum_n \1_{H_n} < \infty \text{ a.s.}.
+    \end{equation*}
+\end{enumerate}
+\end{lemma}
+
+\vspace{3pt}
+\begin{corollary}[First Borel-Cantelli Lemma] \label{BCL1}\ \\
+Suppose $\sum_n \P(\abs{X_n - X} > \vep) < \infty,\ \forall\ \vep > 0$, then
+\begin{equation*}
+    X_n \asto X.
+\end{equation*}
+\end{corollary}
+\begin{proof}\ \\
+By Borel-Cantelli, $\sum_n \1_{\abs{X_n - X} > \vep} < \infty$ or $N_\vep < \infty$ a.s.. $\Rightarrow$ $\exists$ an a.s. set $\Omega_\vep$ s.t. 
+\begin{equation*}
+    N_\vep (\omega) < \infty,\ \forall\ \omega \in \Omega_\vep.
+\end{equation*}
+We need to show that there exists $\Omega_0$ s.t.
+\begin{equation*}
+    \forall\ \omega \in \Omega_0,\ N_\vep < \infty,\ \forall\ \vep > 0.
+\end{equation*}
+Observe that for $0 < \vep_1 < \vep_2$, we have 
+\begin{equation*}
+    N_{\vep_1} \geq N_{\vep_2}\ \Rightarrow\ \{N_{\vep_1} < \infty\} \subset \{N_{\ep_2} < \infty\}
+\end{equation*}
+Now choose $\vep_1 > \vep_2 > \dots,\ \lim_n \vep_n = 0$, and thus
+\begin{equation*}
+    \{N_{\vep_1} < \infty\} \supset \{N_{\vep_2} < \infty\} \supset \dots.
+\end{equation*}
+Define $\Omega_0 = \cap_{k} \{N_{\vep_k} < \infty\}\ \Rightarrow\ \P(\Omega_0) = 1$.
+
+\np For $\omega \in \Omega,\ \vep > \vep_k$ $\Rightarrow$ $\Omega_0 \supset \{N_{\vep_k} < \infty\}$, and thus $N_\ep \leq N_{\ep_k} < \infty$. Complete the proof.
+\end{proof}
 
 
+\vspace{3pt}
+\begin{corollary}[Second Borel Cantelli Lemma]\label{BCL2}\ \\
+Suppose $(B_n)$ are independent Bernoulli sequence, if $\sum_n \E B_n = +\infty$, we have $\sum_n B_n = + \infty$ a.s..
+\end{corollary}
+\begin{proof}\ \\
+Define $p_n = \E B_n,\ a_n = \sum_{i \leq n} p_i,\ S_n = \sum_{i \leq n} B_i,\ S = \lim_n S_n$. We have
+\begin{equation*}
+    \Var{S_n} = \summ{i=1}{n} p_i(1 - p_i) \leq \summ{i=1}{n} p_i = a_n
+\end{equation*}
+For $b \in (0,\infty)$, note $\sum_n \E B_n = +\infty\ \Rightarrow\ a_n \to \infty$, we have
+\begin{equation*}
+    a_n - \sqrt{b a_n} \nearrow +\infty,\ \{S < a_n - \sqrt{b a_n}\} \nearrow \{S < + \infty\}.
+\end{equation*}
+By $S_n \leq S$, we have
+\begin{equation*}
+    \{S < a_n - \sqrt{b a_n}\} \subset \{S_n < a_n - \sqrt{b a_n}\} \subset \{\abs{S_n - a_n} > \sqrt{b a_n}\}.
+\end{equation*}
+Therefore,
+\begin{align*}
+    \P(S < \infty) &= \lim_n \P(S < a_n - \sqrt{ba_n})\\
+    &\leq \limsup_n \P(\abs{S_n - a_n} > \sqrt{b a_n})\\
+    &\leq \limsup_n \frac{\Var{S_n}}{b a_n}\\
+    &\leq \frac{1}{b},
+\end{align*}
+which implies $\P(S < \infty) = 0$, which implies $\sum_n B_n = +\infty$ a.s..
+\end{proof}
+
+
+\vspace{6pt}
+\subsubsection{Convergence in Probability}    
+
+\begin{definition}\ \\
+$X_n \prto X$ if $\forall\ \vep  > 0,\ \lim_n \P(\abs{X_n - X} > \vep) = 0$, we say $X_n$ converges to $X$ in probability.
+\end{definition}
+
+\begin{example}\ \\
+Typewriter function $X_n(x) = 1$ on $[\frac{k}{2^{n'}}, \frac{k + 1}{2^{n'}}]$, where $n' = \max{\{n' \in \N: 2^{n'} \leq n\}}, k = n - 2^{n'}$ and vanishes elsewhere. We have
+\begin{equation*}
+    \liminf_n X_n(\omega) = 0,\ \limsup_n X_n(\omega) = 1.
+\end{equation*}
+This is an example converging in probability but not almost surely.
+\end{example}
+
+\vspace{3pt}
+\begin{lemma}\ \\
+$X_n \asto X$ $\Rightarrow$ $X_n \prto X$.
+\end{lemma}
+\begin{proof}
+DIY.
+\end{proof}
+
+\vspace{3pt}
+\begin{lemma}\label{2.13}\ \\
+If $X_n \prto X$, then $\exists$ a subsequence $(n_k)$ s.t. $X_{n_k} \asto X$.
+\end{lemma}
+\begin{proof}\ \\
+Choose $\vep_k = \frac{1}{2^k}$, then find $n_k$ s.t.
+\begin{equation*}
+\P(\abs{X_{n_k} - X} > \vep_k) \leq \vep_k,    
+\end{equation*}
+which implies
+\begin{equation*}
+    \sum_k \P(\abs{X_{n_k} - X} > \vep_k) \leq \sum_n \vep_k = 1\ \Rightarrow\ X_{n_k} \asto X.
+\end{equation*}
+\end{proof}
+
+\vspace{3pt}
+\begin{theorem}[$\Ls_0$ with convergence in probability is metrizable]\ \\
+Define a metric $d(X,Y):= \E[\abs{X - Y} \wedge 1] = \E f(\abs{X-Y}),\ f(x) = x \wedge 1,\ x \geq 0$. We have
+\begin{itemize}
+    \item $d(X,Y) = 0\ \Leftrightarrow\ X = Y \text{ a.s.}$.
+    \item $d(X,Y) + d(Y,Z) \geq d(X,Z)$ ($f(a) + f(b) \geq f(a+b)$).
+\end{itemize}
+Furthermore, if $X_n \prto X$, we have $d(X_n, X) \to 0$.
+\end{theorem}
+\begin{proof}\ 
+\begin{equation*}
+\begin{aligned}
+        f(\vep) \1_{(\vep,\infty)} (X) &\leq f(X) \leq f(\vep) + \1_{(\vep,\infty)}(X)\\
+        f(\vep) \1_{(\vep,\infty)} (\abs{X_n - X}) &\leq f (\abs{X_n - X}) \leq f(\vep) + \1_{(\vep,\infty)} (\abs{X_n - X}),
+\end{aligned}
+\end{equation*}
+which implies
+\begin{equation*}
+    f(\vep)\P(\abs{X_n - X} > \vep) \leq d(X_n ,X) \leq f(\vep) + \P(\abs{X_n - X} > \vep) \to 0.
+\end{equation*}
+\end{proof}
+
+\vspace{3pt}
+\begin{theorem}\ \\
+$X_n \prto X\ \Leftrightarrow$ every subsequence of $(X_n)$ has a further subsequence that converges to X a.s..
+\end{theorem}
+\begin{proof}\ 
+\begin{itemize}
+    \item $\Rightarrow:$\\
+    $X_n \prto X$ $\Rightarrow$ every subsequence converges to $X$ in probability, then by \hyperref[2.13]{Lemma 2.13}, $\exists$ a further subsequence that converges to $X$ a.s..
+    \item $\Leftarrow:$\\
+    Suppose $X_n \not\prto X$, need to show $\exists\ I \subseteq N$ s.t. for every subsequence $J \subseteq I$, we have $(X_n)_{n \in J}$ does not converge to $X$ a.s.. We have
+    \begin{equation*}
+        P_n(\vep) = \P(\abs{X_n - X} > \vep) \not \to 0.
+    \end{equation*}
+    Define $\delta = \limsup_n P_n(\vep) > 0$. There is $I \subseteq N$ s.t. $P_n(\vep) \to \delta > 0$. Let $J \subseteq I$, if there exists $(X_n)_{n \in J} \asto X$, then $(X_n)_{n \in J} \prto X$, which implies $\lim_{n \in J} P_n(\vep) = 0$ which can't be. 
+\end{itemize}
+\end{proof}
+
+\vspace{3pt}
+\begin{corollary}\ \\
+$X_n \prto X,\ Y_n \prto Y$ $\Rightarrow$ $X_n + Y_n \prto X + Y$.
+\end{corollary}
+\begin{proof}\ \\
+Pick a subsequence $I \subseteq \N$, we have $X_n \prto X$, which means $\exists\ J \subset I$ s.t.
+\begin{equation*}
+    (X_n)_{n \in J} \asto X.
+\end{equation*}
+For $Y_n \prto Y$ $\Rightarrow$ $\exists\ K \subset I$ s.t.
+\begin{equation*}
+    (Y_n)_{n \in (I \cap J)} \asto Y,\ (X_n)_{n \in K} \asto X,
+\end{equation*}
+and thus $(X_n + Y_n)_{n \in K} \asto (X + Y)$.
+\end{proof}
+
+
+\begin{corollary}\ \\
+$X_n \prto X$ $\Rightarrow$ $f(X_n) \prto f(X)$ for continuous $f$.
+\end{corollary}
 
 
 
